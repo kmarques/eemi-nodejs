@@ -1,0 +1,16 @@
+GET http://localhost:3000/users
+# headers
+#HEADERNAME: HEADERVALUE
+#HEADERNAME: HEADERVALUE
+#HEADERNAME: HEADERVALUE
+
+#body
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "email": "t@t.com",
+    "password": "test"
+}
