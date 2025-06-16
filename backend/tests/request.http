@@ -12,5 +12,6 @@ Content-Type: application/json
 
 {
     "email": "t@t.com",
-    "password": "test"
+    "password": "Azerty1234!",
+    "isActivated": false
 }

@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-require("./models/db");
 const userRouter = require("./routes/users");
 
 app.use(express.json());

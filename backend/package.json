@@ -5,13 +5,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "d:s:u": "node migrate.js"
   },
   "author": "",
   "license": "UNLICENSED",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.0",
     "sequelize": "^6.37.7"
   }
