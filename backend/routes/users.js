@@ -1,22 +1,29 @@
 const { Router } = require("express");
 const User = require("../models/user");
+const checkAuth = require("../middlewares/checkAuth");
+const checkRole = require("../middlewares/checkRole");
 
 const router = new Router();
 
-router.get("/users", async (req, res, next) => {
-  const { page = 1, itemsPerPage = 30, ...constraints } = req.query;
-  try {
-    res.json(
-      await User.findAll({
-        where: constraints,
-        limit: itemsPerPage,
-        offset: (page - 1) * itemsPerPage,
-      })
-    );
-  } catch (error) {
-    next(error);
+router.get(
+  "/users",
+  checkAuth,
+  checkRole("ROLE_USER"),
+  async (req, res, next) => {
+    const { page = 1, itemsPerPage = 30, ...constraints } = req.query;
+    try {
+      res.json(
+        await User.findAll({
+          where: constraints,
+          limit: itemsPerPage,
+          offset: (page - 1) * itemsPerPage,
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.post("/users", async (req, res, next) => {
   try {
@@ -49,6 +56,7 @@ router.patch("/users/:id", async (req, res, next) => {
         id,
       },
       returning: true,
+      individualHooks: true,
     });
     if (nbUpdate === 0) return res.sendStatus(404);
     res.json(updatedUser);

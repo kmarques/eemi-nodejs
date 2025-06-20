@@ -1,4 +1,5 @@
 GET http://localhost:3000/users
+Authorization: Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTA0MTU1NzIsImV4cCI6MTc1MDQxOTE3Miwic3ViIjoiMSJ9.gPcikHaXOMGAJJl1_0O_eEJseUcRTdBpAmATSbJ425Y
 # headers
 #HEADERNAME: HEADERVALUE
 #HEADERNAME: HEADERVALUE
@@ -7,6 +8,15 @@ GET http://localhost:3000/users
 #body
 
 ###
+GET http://localhost:3000/users/1
+###
+PATCH http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+    "isActivated": true
+}
+###
 POST http://localhost:3000/users
 Content-Type: application/json
 
@@ -14,4 +24,13 @@ Content-Type: application/json
     "email": "t@t.com",
     "password": "Azerty1234!",
     "isActivated": false
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "t@t.com",
+    "password": "$2b$10$QgAWXF6DZRlZl.s32FYcTewyQHMiEY9nRjcKQKJe0BQGiLOlJhMy."
 }

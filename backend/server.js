@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const userRouter = require("./routes/users");
+const securityRouter = require("./routes/security");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -8,6 +9,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res, next) => {
   res.send("Hello World");
 });
+
+app.use(securityRouter);
 
 app.use(userRouter);
 
