@@ -24,5 +24,18 @@ services:
     ports:
       - "5432:5432"
 
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo_data:/data/db
+      - ./mongo/SampleCollections:/SampleCollections
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    working_dir: /SampleCollections
+    ports:
+      - "27017:27017"
+
 volumes:
   db_data: {}
+  mongo_data: {}
