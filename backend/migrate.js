@@ -1,5 +1,6 @@
-const db = require("./models/db");
-const User = require("./models/user");
+const db = require("./models/db/db");
+const User = require("./models/db/user");
+const Article = require("./models/db/article");
 
 db.sync({
   alter: true,

@@ -1,5 +1,3 @@
-GET http://localhost:3000/users
-Authorization: Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTA0MTU1NzIsImV4cCI6MTc1MDQxOTE3Miwic3ViIjoiMSJ9.gPcikHaXOMGAJJl1_0O_eEJseUcRTdBpAmATSbJ425Y
 # headers
 #HEADERNAME: HEADERVALUE
 #HEADERNAME: HEADERVALUE
@@ -27,10 +25,27 @@ Content-Type: application/json
 }
 
 ###
+# @name login
 POST http://localhost:3000/login
 Content-Type: application/json
 
 {
     "email": "t@t.com",
     "password": "$2b$10$QgAWXF6DZRlZl.s32FYcTewyQHMiEY9nRjcKQKJe0BQGiLOlJhMy."
+}
+
+###
+GET http://localhost:3000/users
+Authorization: Bearer {{ login.response.body.token }}
+
+###
+POST http://localhost:3000/articles
+Content-Type: application/json
+Authorization: Bearer {{ login.response.body.token }}
+
+{
+    "title": "New Article User ID 1",
+    "content": "This is the content of the new article.",
+    "publicationDate": "2024-10-01T00:00:00Z",
+    "UserId": 1
 }

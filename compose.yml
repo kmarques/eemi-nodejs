@@ -12,6 +12,7 @@ services:
       - NODE_ENV=development
       - PORT=3000
       - DATABASE_URL=postgres://user:password@db:5432/mydatabase
+      - MONGO_URL=mongodb://root:example@mongo:27017/app?authSource=admin
 
   db:
     image: postgres:15-alpine3.20

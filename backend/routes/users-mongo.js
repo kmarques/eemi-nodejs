@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const User = require("../models/db/db").models.User;
+const User = require("../models/mongo/user");
 const checkAuth = require("../middlewares/checkAuth");
 const checkRole = require("../middlewares/checkRole");
 
@@ -13,11 +13,9 @@ router.get(
     const { page = 1, itemsPerPage = 30, ...constraints } = req.query;
     try {
       res.json(
-        await User.findAll({
-          where: constraints,
-          limit: itemsPerPage,
-          offset: (page - 1) * itemsPerPage,
-        })
+        await User.find(constraints)
+          .limit(itemsPerPage)
+          .skip((page - 1) * itemsPerPage)
       );
     } catch (error) {
       next(error);
@@ -28,7 +26,7 @@ router.get(
 router.post("/users", async (req, res, next) => {
   try {
     const newUser = await User.create(req.body, {
-      returning: true,
+      new: true,
     });
     res.status(201).json(newUser);
   } catch (error) {
@@ -40,7 +38,7 @@ router.post("/users", async (req, res, next) => {
 router.get("/users/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findById(id);
     if (!user) return res.sendStatus(404);
     res.json(user);
   } catch (error) {
@@ -51,14 +49,10 @@ router.get("/users/:id", async (req, res, next) => {
 router.patch("/users/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const [nbUpdate, [updatedUser]] = await User.update(req.body, {
-      where: {
-        id,
-      },
-      returning: true,
-      individualHooks: true,
+    const updatedUser = await User.updateOne({ _id: id }, req.body, {
+      new: true,
     });
-    if (nbUpdate === 0) return res.sendStatus(404);
+    if (!updatedUser) return res.sendStatus(404);
     res.json(updatedUser);
   } catch (error) {
     next(error);
@@ -68,13 +62,8 @@ router.patch("/users/:id", async (req, res, next) => {
 router.put("/users/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const nbDelete = await User.destroy({
-      where: {
-        id,
-      },
-    });
-    const updatedUser = await User.create(req.body);
-    res.status(nbDelete === 0 ? 201 : 200).json(updatedUser);
+    const updatedUser = await User.replaceOne({ _id: id }, req.body);
+    res.status(updatedUser.modifiedCount === 0 ? 201 : 200).json(updatedUser);
   } catch (error) {
     next(error);
   }
@@ -82,12 +71,8 @@ router.put("/users/:id", async (req, res, next) => {
 
 router.delete("/users/:id", async (req, res, next) => {
   const { id } = req.params;
-  const nbDelete = await User.destroy({
-    where: {
-      id,
-    },
-  });
-  if (nbDelete === 0) return res.sendStatus(404);
+  const nbDelete = await User.deleteOne({ _id: id });
+  if (nbDelete.deletedCount === 0) return res.sendStatus(404);
   res.sendStatus(204);
 });
 
